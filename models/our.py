@@ -8,7 +8,7 @@ import math
 from utils.l2_norm import l2_norm
 from BfCCN.models.modules.DLE import SelfCorrelationComputation, DLE
 from models.modules.BFM import BFM
-from BfCCN.models.modules.process import process
+
 
 class BasicConv(nn.Module):
     def __init__(self, in_planes, out_planes, kernel_size, stride=1, padding=0, dilation=1, groups=1, relu=True, bn=True, bias=False):
@@ -45,7 +45,6 @@ class Our(nn.Module):
             self.feature_extractor_1 = ResNet.resnet12(drop=True)
             self.feature_extractor_2 = ResNet.resnet12(drop=True)
             self.feature_size = 640
-            self.pro = process(channels=self.num_channel) 
             self.conv_block3 = nn.Sequential(
                 BasicConv(self.num_channel // 2, self.feature_size, kernel_size=1, stride=1, padding=0, relu=True)
             )
@@ -76,7 +75,6 @@ class Our(nn.Module):
 
             self.feature_extractor_1 = Conv_4.BackBone(self.num_channel)
             self.feature_extractor_2 = Conv_4.BackBone(self.num_channel)
-            self.pro = process(channels=self.num_channel) 
             self.feature_size = 64 *5 *5
             self.avg = nn.AdaptiveAvgPool2d((5, 5))
             self.both_mlp2 = nn.Sequential(
@@ -124,8 +122,6 @@ class Our(nn.Module):
         fb_3, fb_4 = self.feature_extractor_2(inp)
         fa_4 = self.bfm(fa_4)
         fb_4 = self.bfm(fb_4)
-        fa_3 = self.pro(fa_3)
-        fb_3 = self.pro(fb_3)
         return fa_3, fa_4, fb_3, fb_4
     
     def integration(self, layer1, layer2):
