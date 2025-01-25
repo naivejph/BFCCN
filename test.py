@@ -9,8 +9,7 @@ def test_parser():
     parser.add_argument("--resnet", action="store_true")
     parser.add_argument("--model", choices=[ 'Our'], default='Our')
     parser.add_argument("--dataset", choices=['cub_cropped', 'cub_raw',
-                                              'dogs',
-                                              'meta_iNat', 'mini-ImageNet','cars'], default='cub_cropped')
+                                              'dogs', 'cars'], default='cub_cropped')
     parser.add_argument("--train_way", help="training way", type=int, default=10)
 
     parser.add_argument("--train_shot", help="number of support images per class for meta-training and meta-testing during validation", type=int,default=5)
@@ -35,7 +34,7 @@ if args.pre:
 else:
     test_path = os.path.join(test_path, 'test')
 
-gpu = 0
+gpu = 2
 torch.cuda.set_device(gpu)
 
 model = Our(args=args)
